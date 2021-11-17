@@ -1,1 +1,11 @@
 /* Other rules */
+
+* {
+  font-family: "Source Sans Pro", sans-serif;
+  object-fit: cover;
+  box-shadow: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: auto;
+}
