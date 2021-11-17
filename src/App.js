@@ -9,19 +9,19 @@ import Comics from "./Pages/Comics/Comics";
 import Login from "./Pages/Login/Login";
 import Signup from "./Pages/Signup/Signup";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cookies from "js-cookie";
 
 function App() {
-  const [token, setToken] = useState("");
-
+  const [token, setToken] = useState(Cookies.get("Token") || null);
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <Router>
-      <Header />
+      <Header token={token} setToken={setToken} />
 
       <Routes>
-        <Route path="/" element={<Home token={token} />} />
+        <Route path="/" element={<Home token={token} setToken={setToken} />} />
 
         <Route
           path="/login"
@@ -34,8 +34,16 @@ function App() {
           setToken={setToken}
         />
 
-        <Route path="/personnages" element={<Personnages />} />
-        <Route path="/comics" element={<Comics />} />
+        <Route
+          path="/personnages"
+          element={
+            <Personnages isLoading={isLoading} setIsLoading={setIsLoading} />
+          }
+        />
+        <Route
+          path="/comics"
+          element={<Comics isLoading={isLoading} setIsLoading={setIsLoading} />}
+        />
         <Route path="/favoris" element={<Favoris />} />
 
         <Route path="*" element={<NoMatch />} />

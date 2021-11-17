@@ -21,7 +21,7 @@ const Signup = ({ token, setToken }) => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          "https://lereacteur-vinted-api.herokuapp.com/user/signup",
+          "https://mfomarvel.herokuapp.com/user/signup",
           {
             email: email,
             username: username,

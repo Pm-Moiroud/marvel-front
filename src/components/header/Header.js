@@ -1,34 +1,52 @@
 import "./header.css";
 import logoMarvel from "../../assets/svg/logoMarvel.svg";
-import { Link } from "react-router-dom";
 
-const Header = () => {
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
+const Header = ({ token, setToken }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="header-container">
-      <header>
+    <div className="background-header">
+      <header className="header-container">
         <Link to="/">
           <img className="marvel-logo" src={logoMarvel} alt="not found" />
         </Link>
 
         <nav className="nav-pages">
           <Link to="/personnages">
-            <span>Personnages</span>
+            <button className="header-btn ">Personnages</button>
           </Link>
           <Link to="/comics">
-            <span>Comics</span>
+            <button className="header-btn ">Comics</button>
           </Link>
           <Link to="/favoris">
-            <span>Favoris</span>
+            <button className="header-btn ">Favoris</button>
           </Link>
         </nav>
-        <nav>
-          <Link to="/login">
-            <button>Se Connecter</button>
-          </Link>
-          <Link to="/signup">
-            <button>S'inscrire</button>
-          </Link>
-        </nav>
+
+        {token ? (
+          <button
+            className="header-btn"
+            onClick={() => {
+              setToken(null);
+              Cookies.remove("Token");
+              navigate("/");
+            }}
+          >
+            Se déconnecter
+          </button>
+        ) : (
+          <div className="login-signup ">
+            <Link to="/SignUp">
+              <button className="header-btn ">S'inscrire</button>
+            </Link>
+            <Link to="/login">
+              <button className="header-btn margin-header">Se connecter</button>
+            </Link>
+          </div>
+        )}
       </header>
     </div>
   );
