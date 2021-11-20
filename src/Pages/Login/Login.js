@@ -6,10 +6,9 @@ import Cookies from "js-cookie";
 
 import "./login.css";
 
-const Login = ({ token, setToken }) => {
+const Login = ({ giveToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -17,29 +16,22 @@ const Login = ({ token, setToken }) => {
     try {
       event.preventDefault();
       const fetchData = async () => {
-        const response = await axios.post(
-          "https://mfomarvel.herokuapp.com/user/login",
-          {
-            email: email,
-            password: password,
-          }
-        );
+        const response = await axios.post("http://localhost:3001/user/login", {
+          email: email,
+          password: password,
+        });
 
-        setToken(response.data.token);
+        giveToken(response.data.token);
+        navigate("/");
       };
       fetchData();
     } catch (error) {
       if (error.response.status === 400) {
-        setErrorMessage(
-          "Impossible de trouver un compte correspondant à cette adresse e-mail"
-        );
+        console.log("Problem");
       }
     }
   };
-  if (token) {
-    Cookies.set("Token", token, { expires: 30 });
-    navigate("/");
-  }
+
   return (
     <div className="form-container">
       <h1>Se connecter</h1>
@@ -55,7 +47,6 @@ const Login = ({ token, setToken }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {errorMessage ? <span>{errorMessage}</span> : null}
         <button>Se connecter</button>
         <a href="https://www.lereacteur.io/" className="need-help ">
           Besoin d'aide ? Cliquez ici

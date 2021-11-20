@@ -4,9 +4,9 @@ import logoMarvel from "../../assets/svg/logoMarvel.svg";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Header = ({ token, setToken }) => {
+const Header = () => {
   const navigate = useNavigate();
-
+  const token = Cookies.get("Token");
   return (
     <div className="background-header">
       <header className="header-container">
@@ -30,7 +30,6 @@ const Header = ({ token, setToken }) => {
           <button
             className="header-btn"
             onClick={() => {
-              setToken(null);
               Cookies.remove("Token");
               navigate("/");
             }}

@@ -8,38 +8,50 @@ import Favoris from "./Pages/Favoris/Favoris";
 import Comics from "./Pages/Comics/Comics";
 import Login from "./Pages/Login/Login";
 import Signup from "./Pages/Signup/Signup";
+import PersonnagesComics from "./Pages/PersonnagesComics/PersonnagesComics";
 
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cookies from "js-cookie";
 
 function App() {
-  const [token, setToken] = useState(Cookies.get("Token") || null);
   const [isLoading, setIsLoading] = useState(true);
+  const [params, setParams] = useState({});
+
+  // Fonction qui gère le token des users dans les cookies.
+  const giveToken = (token) => {
+    const tokenExist = Cookies.get("Token");
+    if (!tokenExist) {
+      Cookies.set("Token", token);
+    }
+  };
   return (
     <Router>
-      <Header token={token} setToken={setToken} />
+      <Header giveToken={giveToken} />
 
       <Routes>
-        <Route path="/" element={<Home token={token} setToken={setToken} />} />
+        <Route path="/" element={<Home />} />
 
-        <Route
-          path="/login"
-          element={<Login token={token} setToken={setToken} />}
-        />
-        <Route
-          path="/signup"
-          element={<Signup />}
-          token={token}
-          setToken={setToken}
-        />
+        <Route path="/login" element={<Login giveToken={giveToken} />} />
+        <Route path="/signup" element={<Signup giveToken={giveToken} />} />
 
         <Route
           path="/personnages"
           element={
-            <Personnages isLoading={isLoading} setIsLoading={setIsLoading} />
+            <Personnages
+              setParams={setParams}
+              params={params}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+            />
           }
         />
+
+        <Route
+          path="/comics/:characterId"
+          element={<PersonnagesComics />}
+        ></Route>
+
         <Route
           path="/comics"
           element={<Comics isLoading={isLoading} setIsLoading={setIsLoading} />}

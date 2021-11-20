@@ -6,43 +6,31 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
-const Signup = ({ token, setToken }) => {
-  const [username, setUsername] = useState("");
+const Signup = ({ giveToken }) => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          "https://mfomarvel.herokuapp.com/user/signup",
-          {
-            email: email,
-            username: username,
-            password: password,
-          }
-        );
-
-        setToken(response.data.token);
-      } catch (error) {
-        if (error.response.status === 409) {
-          setErrorMessage("Mauvais email et/ou mot de passe");
-        }
+    try {
+      event.preventDefault();
+      const fetchData = async () => {
+        const response = await axios.post("http://localhost:3001/user/signup", {
+          email: email,
+          password: password,
+          username: username,
+        });
+        giveToken(response.data.token);
+        navigate("/");
+        /*    Cookies.set("Token", response.data.token); */
+      };
+      fetchData();
+    } catch (error) {
+      if (error.response.status === 400) {
+        console.log("Problem");
       }
-    };
-    fetchData();
-    if (token) {
-      setErrorMessage("");
-      Cookies.set("Token", token, { expires: 30 });
-      navigate("/");
-    } else {
-      Cookies.remove("Token");
     }
   };
 
@@ -78,7 +66,7 @@ const Signup = ({ token, setToken }) => {
           Conditions et Politique de Confidentialité de Vinted. Je confirme
           avoir au moins 18
         </p>
-        <span>{errorMessage}</span>
+        <span></span>
         <button className="connect">S'inscrire</button>
         <Link to="/login">
           <span className="already-user">

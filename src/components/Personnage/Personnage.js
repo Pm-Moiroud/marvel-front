@@ -1,6 +1,6 @@
 import "./personnage.css";
 
-const Personnage = ({ name, id, picture, description, extension }) => {
+const Personnage = ({ name, picture, description, extension }) => {
   return (
     <>
       <section className="section-char">
